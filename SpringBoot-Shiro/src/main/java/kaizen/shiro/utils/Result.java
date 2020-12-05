@@ -15,7 +15,7 @@ public class Result {
     private String msg;
     private Object data;
 
-    public Result success(String msg, Object data) {
+    public static Result success(String msg, Object data) {
         Result r = new Result();
         r.setCode(0);
         r.setMsg(msg);
@@ -23,7 +23,7 @@ public class Result {
         return r;
     }
 
-    public Result success(Object data) {
+    public static Result success(Object data) {
         Result r = new Result();
         r.setCode(0);
         r.setMsg("操作成功");
@@ -31,7 +31,7 @@ public class Result {
         return r;
     }
 
-    public Result fail(String msg) {
+    public static Result fail(String msg) {
         Result r = new Result();
         r.setCode(-1);
         r.setMsg(msg);
@@ -39,7 +39,7 @@ public class Result {
         return r;
     }
 
-    public Result fail() {
+    public static Result fail() {
         Result r = new Result();
         r.setCode(-1);
         r.setMsg("操作失败");

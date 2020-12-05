@@ -28,9 +28,8 @@ public class UserController {
      */
     @GetMapping("/list")
     public Result userList(User user) {
-        Result result = new Result();
         List<User> userList = userService.userList(user);
-        return result.success(userList);
+        return Result.success(userList);
     }
 
 }

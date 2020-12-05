@@ -6,7 +6,7 @@ package kaizen.shiro;
  * @Github: https://github.com/weizujie
  */
 
-import kaizen.shiro.config.CustomerRealm;
+import kaizen.shiro.shiro.CustomerRealm;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;

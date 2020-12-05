@@ -6,7 +6,7 @@ package kaizen.shiro;
  * @Github: https://github.com/weizujie
  */
 
-import kaizen.shiro.config.CustomerRealm;
+import kaizen.shiro.shiro.CustomerRealm;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -49,6 +49,15 @@ public class CustomerMD5RealmAuthenticatorTest {
         } catch (IncorrectCredentialsException e) {
             e.printStackTrace();
             System.out.println("密码错误");
+        }
+
+
+        if (subject.isAuthenticated()) {
+            // 基于角色的权限控制
+            System.out.println("拥有 admin 权限：" + subject.hasRole("admin"));
+            System.out.println("==================");
+            // 基于权限字符串的访问控制 ( 资源标识符:操作:资源类型 )
+            System.out.println("权限：" + subject.isPermitted("user:*:*"));
         }
     }
 
