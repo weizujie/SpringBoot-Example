@@ -8,6 +8,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
@@ -19,6 +20,7 @@ import java.util.Map;
  */
 
 @RestController
+@RequestMapping("/api/v1/")
 public class LoginController {
 
     /**
@@ -38,11 +40,12 @@ public class LoginController {
     }
 
     /**
-     * 处理用户推出
+     * 处理用户退出
      */
     @PostMapping("/logout")
-    public void logout() {
+    public Result logout() {
         Subject subject = SecurityUtils.getSubject();
         subject.logout();
+        return Result.success("退出成功");
     }
 }

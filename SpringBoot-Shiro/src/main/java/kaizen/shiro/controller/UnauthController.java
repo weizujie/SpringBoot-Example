@@ -2,6 +2,7 @@ package kaizen.shiro.controller;
 
 import kaizen.shiro.utils.Result;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -13,11 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
+@RequestMapping("/api/v1")
 public class UnauthController {
     @GetMapping("/unauth")
     public Result unauth() {
-        Result result = new Result();
-        result.setMsg("未登录");
-        return result;
+        return Result.fail("你没有访问该资源的权限");
     }
 }

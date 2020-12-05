@@ -31,6 +31,14 @@ public class Result {
         return r;
     }
 
+    public static Result success(String msg) {
+        Result r = new Result();
+        r.setCode(0);
+        r.setMsg(msg);
+        r.setData(null);
+        return r;
+    }
+
     public static Result fail(String msg) {
         Result r = new Result();
         r.setCode(-1);
