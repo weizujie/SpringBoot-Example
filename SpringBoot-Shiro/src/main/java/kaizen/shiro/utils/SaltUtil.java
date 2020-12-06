@@ -9,7 +9,7 @@ import java.util.Random;
  * @Date: 2020/12/6
  * @Github: https://github.com/weizujie
  */
-public class Salt {
+public class SaltUtil {
 
     public static String getSalt(int n) {
         char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();

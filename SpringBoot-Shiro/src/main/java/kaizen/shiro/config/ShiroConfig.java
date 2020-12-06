@@ -1,6 +1,7 @@
 package kaizen.shiro.config;
 
 import kaizen.shiro.shiro.CustomerRealm;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
@@ -48,8 +49,14 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setSecurityManager(securityManager);
 
         Map<String, String> map = new HashMap<>();
+
+
+        // 配置系统公共资源(匿名访问)
+        map.put("/api/v1/login", "anon");
+        map.put("/api/v1/register", "anon");
+
         // 配置系统受限资源(需要认证才能访问的资源)
-        map.put("/api/v1/user/*", "authc");
+        map.put("/**", "authc");
 
         // 配置 shiro 默认登录界面地址。前后端分离项目中，登录界面跳转应该由前端控制，后端仅返回 json 数据
         shiroFilterFactoryBean.setLoginUrl("/api/v1/unauth");
@@ -77,6 +84,14 @@ public class ShiroConfig {
      */
     @Bean
     public Realm realm() {
-        return new CustomerRealm();
+        CustomerRealm realm = new CustomerRealm();
+        HashedCredentialsMatcher credentialsMatcher = new HashedCredentialsMatcher();
+        // 使用加密算法
+        credentialsMatcher.setHashAlgorithmName("md5");
+        // 设置散列次数，与 IUserServiceImpl 类中设置的一致
+        credentialsMatcher.setHashIterations(1024);
+        // 设置 realm 使用 hash 凭证匹配器
+        realm.setCredentialsMatcher(credentialsMatcher);
+        return realm;
     }
 }

@@ -1,9 +1,6 @@
 package kaizen.shiro.pojo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-
-import java.util.Date;
 
 /**
  * @Author: weizujie
@@ -17,12 +14,7 @@ public class User {
 
     private Long id;
     private String username;
-    @JsonIgnore
     private String password;
     private String salt;
-    private Date createdTime;
-    private Date updatedTime;
-
-
 
 }

@@ -1,12 +1,14 @@
 package kaizen.shiro.controller;
 
 import kaizen.shiro.pojo.User;
-import kaizen.shiro.utils.Result;
+import kaizen.shiro.service.IUserService;
+import kaizen.shiro.utils.ResultUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +24,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/")
-public class LoginController {
+public class AuthController {
 
     @Autowired
     private IUserService userService;
@@ -31,12 +33,13 @@ public class LoginController {
      * 处理用户注册
      */
     @PostMapping("/register")
-    public Result saveUser(@RequestBody User user) {
+    public ResultUtil saveUser(@RequestBody User user) {
         try {
             userService.save(user);
-            return Result.success(user);
+            return ResultUtil.success(user);
         } catch (Exception e) {
-            return Result.fail();
+            e.printStackTrace();
+            return ResultUtil.fail(e.getMessage());
         }
     }
 
@@ -46,13 +49,14 @@ public class LoginController {
      * RequestBody 主要用来接收前端传递给后端的json字符串中的数据的(请求体中的数据的)
      */
     @PostMapping("/login")
-    public Result login(@RequestBody Map<String, String> map) {
+    public ResultUtil login(@RequestBody Map<String, String> map) {
         try {
             Subject subject = SecurityUtils.getSubject();
             subject.login(new UsernamePasswordToken(map.get("username"), map.get("password")));
-            return Result.success("登录成功", null);
+            return ResultUtil.success("登录成功", subject.getPrincipal());
         } catch (UnknownAccountException | IncorrectCredentialsException e) {
-            return Result.fail("用户名或密码错误");
+            e.printStackTrace();
+            return ResultUtil.fail("用户名或密码错误");
         }
     }
 
@@ -60,9 +64,9 @@ public class LoginController {
      * 处理用户退出
      */
     @PostMapping("/logout")
-    public Result logout() {
+    public ResultUtil logout() {
         Subject subject = SecurityUtils.getSubject();
         subject.logout();
-        return Result.success("退出成功");
+        return ResultUtil.success("退出成功");
     }
 }

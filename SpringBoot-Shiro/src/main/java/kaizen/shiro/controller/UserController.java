@@ -2,11 +2,9 @@ package kaizen.shiro.controller;
 
 import kaizen.shiro.pojo.User;
 import kaizen.shiro.service.IUserService;
-import kaizen.shiro.utils.Result;
+import kaizen.shiro.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,9 +25,16 @@ public class UserController {
      * 查询用户信息列表
      */
     @GetMapping("/list")
-    public Result userList(User user) {
-        List<User> userList = userService.userList(user);
-        return Result.success(userList);
+    public ResultUtil userList(User user) {
+        try {
+            List<User> userList = userService.userList(user);
+            return ResultUtil.success(userList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultUtil.fail();
+        }
     }
+
+
 
 }

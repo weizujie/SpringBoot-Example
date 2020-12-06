@@ -7,6 +7,7 @@ spring:
     url: jdbc:mysql://localhost:3306/springboot-shiro?userUnicode=true&serverTimezone=Asia/Shanghai&characterEncoding=utf8
     username: root
     password: toor
+    type: com.alibaba.druid.pool.DruidDataSource
 
 
 mybatis:
@@ -14,3 +15,4 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  type-aliases-package: kaizen.shiro.pojo

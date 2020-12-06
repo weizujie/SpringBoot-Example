@@ -1,6 +1,7 @@
 package kaizen.shiro.mapper;
 
 import kaizen.shiro.pojo.User;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -26,4 +27,19 @@ public interface UserMapper {
      * @return List User
      */
     List<User> userList(User user);
+
+    /**
+     * 保存用户
+     *
+     * @param user
+     */
+    void save(User user);
+
+    /**
+     * 根据用户名查询用户信息
+     *
+     * @param username
+     * @return
+     */
+    User findByUsername(String username);
 }

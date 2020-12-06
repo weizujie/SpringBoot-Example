@@ -1,13 +1,14 @@
 package kaizen.shiro.shiro;
 
 
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import kaizen.shiro.pojo.User;
+import kaizen.shiro.service.IUserService;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.ByteSource;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 自定义 realm
@@ -17,6 +18,9 @@ import org.apache.shiro.subject.PrincipalCollection;
  * @Github: https://github.com/weizujie
  */
 public class CustomerRealm extends AuthorizingRealm {
+
+    @Autowired
+    private IUserService userService;
 
     /**
      * 授权
@@ -32,17 +36,19 @@ public class CustomerRealm extends AuthorizingRealm {
     /**
      * 认证
      *
-     * @param token
+     * @param authenticationToken
      * @return
      * @throws AuthenticationException
      */
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        // 获取身份信息
-        String principal = (String) token.getPrincipal();
-        if ("admin".equals(principal)) {
-            return new SimpleAuthenticationInfo(principal, "admin", this.getName());
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
+        UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
+        User dbUser = userService.findByUsername(token.getUsername());
+        if (dbUser == null) {
+            throw new UnknownAccountException("该用户名不存在");
         }
-        return null;
+        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(dbUser.getUsername(), dbUser.getPassword(), this.getName());
+        info.setCredentialsSalt(ByteSource.Util.bytes(dbUser.getSalt()));
+        return info;
     }
 }

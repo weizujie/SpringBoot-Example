@@ -13,6 +13,7 @@ public interface IUserService {
 
     /**
      * 根据 id 查询用户信息
+     *
      * @param id
      * @return
      */
@@ -20,8 +21,24 @@ public interface IUserService {
 
     /**
      * 查询用户列表
+     *
      * @param user
      * @return
      */
     List<User> userList(User user);
+
+    /**
+     * 保存用户
+     *
+     * @param user
+     */
+    void save(User user) throws Exception;
+
+    /**
+     * 根据用户名查询用户信息
+     *
+     * @param username
+     * @return
+     */
+    User findByUsername(String username);
 }
