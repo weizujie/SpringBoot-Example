@@ -7,5 +7,6 @@
 
 - [SpringBoot-Shiro](https://github.com/weizujie/SpringBoot-Example/tree/main/SpringBoot-Shiro) ：SpringBoot 整合 Shiro
     - 2020年12月05日：实现用户登录和退出功能
+    - 2020年12月06日：密码进行 md5 + salt + hash 散列加密，并实现用户注册，将数据存入数据库中
     
 - 持续更新中...

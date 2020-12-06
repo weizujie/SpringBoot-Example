@@ -1,5 +1,6 @@
 package kaizen.shiro.controller;
 
+import kaizen.shiro.pojo.User;
 import kaizen.shiro.utils.Result;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -22,6 +23,22 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/")
 public class LoginController {
+
+    @Autowired
+    private IUserService userService;
+
+    /**
+     * 处理用户注册
+     */
+    @PostMapping("/register")
+    public Result saveUser(@RequestBody User user) {
+        try {
+            userService.save(user);
+            return Result.success(user);
+        } catch (Exception e) {
+            return Result.fail();
+        }
+    }
 
     /**
      * 处理用户登录
