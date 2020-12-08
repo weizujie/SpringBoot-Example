@@ -88,8 +88,7 @@ public class ShiroConfig {
         // 开启授权缓存
         realm.setAuthorizationCachingEnabled(true);
         realm.setAuthorizationCacheName("authorizationCache");
-
-
+        
         return realm;
     }
 
