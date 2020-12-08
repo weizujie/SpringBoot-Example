@@ -2,6 +2,7 @@ package kaizen.shiro.config;
 
 import kaizen.shiro.shiro.CustomerRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
@@ -75,6 +76,20 @@ public class ShiroConfig {
         credentialsMatcher.setHashIterations(1024);
         // 设置 realm 使用 hash 凭证匹配器
         realm.setCredentialsMatcher(credentialsMatcher);
+
+        // 开启缓存管理
+        EhCacheManager cacheManager = new EhCacheManager();
+        realm.setCacheManager(cacheManager);
+        // 开启全局缓存
+        realm.setCachingEnabled(true);
+        // 开启认证缓存
+        realm.setAuthenticationCachingEnabled(true);
+        realm.setAuthenticationCacheName("authenticationCache");
+        // 开启授权缓存
+        realm.setAuthorizationCachingEnabled(true);
+        realm.setAuthorizationCacheName("authorizationCache");
+
+
         return realm;
     }
 
