@@ -6,22 +6,18 @@ import java.util.List;
 
 /**
  * @Author: weizujie
- * @Date: 2020/12/2
+ * @Date: 2020/12/7
  * @Github: https://github.com/weizujie
  */
-
-
 @Data
-public class User {
+public class Role {
 
     private Integer id;
-    private String username;
-    private String password;
-    private String salt;
+    private String name;
 
     /**
-     * 定义角色的集合
+     * 定义权限的集合
      */
-    private List<Role> roles;
+    private List<Perms> perms;
 
 }

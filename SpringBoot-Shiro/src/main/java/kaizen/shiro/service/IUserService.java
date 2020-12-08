@@ -1,5 +1,6 @@
 package kaizen.shiro.service;
 
+import kaizen.shiro.pojo.Perms;
 import kaizen.shiro.pojo.User;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public interface IUserService {
      * @param id
      * @return
      */
-    User findById(Long id);
+    User findById(Integer id);
 
     /**
      * 查询用户列表
@@ -32,7 +33,7 @@ public interface IUserService {
      *
      * @param user
      */
-    void save(User user) throws Exception;
+    void save(User user);
 
     /**
      * 根据用户名查询用户信息
@@ -41,4 +42,27 @@ public interface IUserService {
      * @return
      */
     User findByUsername(String username);
+
+    /**
+     * 查询一个用户下的所有角色
+     *
+     * @param username
+     * @return
+     */
+    User findRolesByUsername(String username);
+
+    /**
+     * 查询一个角色下的所有权限
+     *
+     * @param id
+     * @return
+     */
+    List<Perms> findPermsByRoleId(Integer id);
+
+    /**
+     * 根据用户 id 删除用户信息
+     *
+     * @param id
+     */
+    void deleteById(Integer id);
 }

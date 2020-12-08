@@ -18,6 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class UnauthController {
     @GetMapping("/unauth")
     public ResultUtil unauth() {
-        return ResultUtil.fail("你没有访问该资源的权限");
+        return ResultUtil.fail("未授权资源禁止访问");
     }
 }

@@ -2,10 +2,13 @@ package kaizen.shiro.config;
 
 import kaizen.shiro.shiro.CustomerRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.Realm;
+import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
+import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -21,23 +24,6 @@ import java.util.Map;
  */
 @Configuration
 public class ShiroConfig {
-
-    /**
-     * Session 管理器
-     */
-    @Bean
-    public DefaultWebSessionManager sessionManager() {
-        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
-        // 设置 session 过期时间为 1 小时
-        sessionManager.setGlobalSessionTimeout(60 * 60 * 1000);
-        // 删除过期的 session
-        sessionManager.setDeleteInvalidSessions(true);
-        // 是否定时检查 session
-        sessionManager.setSessionValidationSchedulerEnabled(true);
-        // 取消登录跳转 URL 后面的 jsessionid 参数
-        sessionManager.setSessionIdUrlRewritingEnabled(false);
-        return sessionManager;
-    }
 
     /**
      * 创建 shiroFilter，负责拦截所有请求
@@ -60,9 +46,6 @@ public class ShiroConfig {
 
         // 配置 shiro 默认登录界面地址。前后端分离项目中，登录界面跳转应该由前端控制，后端仅返回 json 数据
         shiroFilterFactoryBean.setLoginUrl("/api/v1/unauth");
-
-        // 设置访问未授权地址时跳转的页面
-        shiroFilterFactoryBean.setUnauthorizedUrl("/api/v1/unauth");
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
         return shiroFilterFactoryBean;
@@ -94,4 +77,48 @@ public class ShiroConfig {
         realm.setCredentialsMatcher(credentialsMatcher);
         return realm;
     }
+
+    /**
+     * Session 管理器
+     */
+    @Bean
+    public DefaultWebSessionManager sessionManager() {
+        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+        // 设置 session 过期时间为 1 小时
+        sessionManager.setGlobalSessionTimeout(60 * 60 * 1000);
+        // 删除过期的 session
+        sessionManager.setDeleteInvalidSessions(true);
+        // 是否定时检查 session
+        sessionManager.setSessionValidationSchedulerEnabled(true);
+        // 取消登录跳转 URL 后面的 jsessionid 参数
+        sessionManager.setSessionIdUrlRewritingEnabled(false);
+        return sessionManager;
+    }
+
+
+    /**
+     * 开启 Shiro 注解，如@RequiresRoles,@RequiresPermissions
+     *
+     * @return
+     */
+    @Bean
+    public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
+        DefaultAdvisorAutoProxyCreator proxyCreator = new DefaultAdvisorAutoProxyCreator();
+        proxyCreator.setProxyTargetClass(true);
+        return proxyCreator;
+    }
+
+    /**
+     * 开启 Shiro 注解，如@RequiresRoles,@RequiresPermissions
+     *
+     * @param securityManager
+     * @return
+     */
+    @Bean
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
+        AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
+        advisor.setSecurityManager(securityManager);
+        return advisor;
+    }
+
 }

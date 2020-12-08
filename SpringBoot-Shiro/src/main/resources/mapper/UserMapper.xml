@@ -4,24 +4,56 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kaizen.shiro.mapper.UserMapper">
 
+    <!-- 保存用户 -->
+    <insert id="save" parameterType="User">
+        INSERT INTO t_user(username, password, salt) VALUES (#{username}, #{password}, #{salt})
+    </insert>
+
+    <!-- 根据用户 id 删除用户信息 -->
+    <delete id="deleteById">
+        DELETE FROM t_user WHERE id = #{id}
+    </delete>
+
     <!-- 根据 id 查询用户信息 -->
     <select id="findById" resultType="User">
-        select id, username from user where id = #{id}
+        SELECT id, username, password, salt FROM t_user WHERE id = #{id}
     </select>
 
     <!-- 查询用户信息列表 -->
     <select id="userList" resultType="User">
-        select id, username from t_user
+        SELECT id, username, password, salt FROM t_user
     </select>
 
-    <!-- 保存用户 -->
-    <insert id="save" parameterType="User">
-        insert into t_user(username, password, salt) values (#{username}, #{password}, #{salt})
-    </insert>
 
     <!-- 根据用户名查询用户信息 -->
     <select id="findByUsername" resultType="User">
-        select username, password, salt from t_user where username = #{username}
+        SELECT id, username, password, salt FROM t_user WHERE username = #{username}
+    </select>
+
+    <!-- column：与 SQL 语句中 as 后面的对应   property：实体类中定义的对象的名称 -->
+    <!-- collection 包裹的是角色信息 -->
+    <resultMap id="userMap" type="User">
+        <id column="uid" property="id"/>
+        <result column="username" property="username"/>
+        <collection property="roles" javaType="list" ofType="Role">
+            <id column="rid" property="id"/>
+            <result column="rname" property="name"/>
+        </collection>
+    </resultMap>
+    <select id="findRolesByUsername" parameterType="String" resultMap="userMap">
+        SELECT u.id uid, u.username, r.id rid, r.name rname FROM t_user u
+        LEFT JOIN t_user_role ur ON u.id = ur.user_id
+        LEFT JOIN t_role r ON r.id = ur.role_id
+        WHERE u.username = #{username}
+    </select>
+
+
+    <!-- 如果设置别名(如 p.id as pid)，有权限角色访问对应的资源时也会报无权限异常 -->
+    <select id="findPermsByRoleId" parameterType="Integer" resultType="Perms">
+        SELECT p.id, p.name, r.name FROM t_role r
+        LEFT JOIN t_role_perms rp ON r.id = rp.role_id
+        LEFT JOIN t_perms p ON p.id = rp.perms_id
+        WHERE r.id = #{id}
     </select>
 
 </mapper>
