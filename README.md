@@ -3,7 +3,7 @@
 
 > 该仓库所有的例子**只有后端代码，没有前端代码**！请自行通过 Postman 等工具进行测试 :)
 
-## 已整合的技术
+## SpringBoot 整合 Shiro 的小 Demo
 
 - [SpringBoot-Shiro](https://github.com/weizujie/SpringBoot-Example/tree/main/SpringBoot-Shiro) ：SpringBoot 整合 Shiro
     - 实现功能：
